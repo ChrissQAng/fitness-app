@@ -15,7 +15,7 @@ var intervalIndex
 var stepnumber = 0
 var totalStartTime = 0
 
-// Die Daten sollten von einer CSV-Datei kommen, die vom Server geladen wird, zum Probieren mal ein Test:
+
 var scheduleData = []
 
 const formatTime = seconds => {
@@ -100,28 +100,25 @@ onMounted(() => {
 				    
 <template>
   <audio id="bleep" src="bleep.mp3"></audio>				      
-  <h4>{{ totalTimeDisplay }}</h4>
+ 
   <h3>{{ stepnumberDisplay }}. {{ headlinetext }}</h3>
   <h4>-> {{ nextStepHeadlinetext }}</h4>
   <div class="textdisplay">{{ text1 }}</div>
   <div class="textdisplay">{{ text2 }}</div>
-  <div>{{ remainingTimeDisplay }}</div>
+  <div class="foot-box">
+  <div class="remaining-time">{{ remainingTimeDisplay }}</div>
+  <div>
   <button>&vert;&vert;</button>
   <button @click="jumpToPreviousStep()">&vert;&lt;</button>
   <button @click="jumpToNextStep()">&gt;&vert;</button>
+  </div>
+ <div class="total-time">{{ totalTimeDisplay }}</div>
+  </div>
 </template>
 
 
 <style scoped>
-button {
-    background-color: #cccccc;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-}
-h3 {
-    font-size: 3em;
-}
-div {
-    font-size: 2em;
-}
+
+
+
 </style>
