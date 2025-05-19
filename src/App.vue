@@ -9,12 +9,13 @@ const nextStepHeadlinetext = ref('')
 const remainingTimeDisplay = ref('')
 const stepnumberDisplay = ref('')
 const totalTimeDisplay = ref('')
+const isPaused = ref(false)
 
 var nextStepTime = 0
 var intervalIndex
 var stepnumber = 0
 var totalStartTime = 0
-
+var pausedRemainingTime = 0
 
 var scheduleData = []
 
@@ -44,6 +45,9 @@ const setCurrentStepInfo = () => {
 }
 
 const notify = () => {
+
+if (isPaused.value) return // Bei Pause nichts tun
+
   totalTimeDisplay.value = formatTime(Math.floor((Date.now() - totalStartTime) / 1000))
   let remainingTime = nextStepTime - Date.now()
   if(nextStepTime > 0 && remainingTime < 0) {
@@ -64,6 +68,24 @@ const notify = () => {
   else {
     if(nextStepTime > 0)
       remainingTimeDisplay.value = formatTime(Math.floor(remainingTime / 1000) + 1)
+  }
+}
+
+const pauseTime = () => {
+  if (!isPaused.value) {
+    // stop
+    isPaused.value = true
+    clearInterval(intervalIndex)
+    if (nextStepTime > 0) {
+      pausedRemainingTime = nextStepTime - Date.now()
+    }
+  } else {
+    // go on
+    isPaused.value = false
+    if (nextStepTime > 0) {
+      nextStepTime = Date.now() + pausedRemainingTime
+    }
+    intervalIndex = setInterval(() => { notify() }, 200)
   }
 }
 
@@ -108,7 +130,8 @@ onMounted(() => {
   <div class="foot-box">
   <div class="remaining-time">{{ remainingTimeDisplay }}</div>
   <div>
-  <button>&vert;&vert;</button>
+  <!-- <button>&vert;&vert;</button> -->
+   <button @click="pauseTime()">{{ isPaused ? '>' : '||' }}</button>
   <button @click="jumpToPreviousStep()">&vert;&lt;</button>
   <button @click="jumpToNextStep()">&gt;&vert;</button>
   </div>
