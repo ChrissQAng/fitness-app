@@ -1,5 +1,6 @@
 .env
-node_modules
+node_modulesgit add .
+
 dist
 dist-ssr
 *.local
